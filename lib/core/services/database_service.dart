@@ -65,77 +65,30 @@ class DatabaseService {
 
   void saveProject(Project p) => _put('projects', p.id, p.toJson());
 
+  /// Boxes whose entries belong to a project (deleted with it).
+  static const _projectBoxes = [
+    'tasks',
+    'objectives',
+    'messages',
+    'notes',
+    'budget',
+    'decisions',
+    'risks',
+    'journal',
+    'resources',
+    'milestones',
+  ];
+
   void deleteProject(String id) {
     _delete('projects', id);
-    _box('tasks').deleteAll(_tasksForId('tasks', id));
-    _box('objectives').deleteAll(_objectivesForId(id));
-    _box('messages').deleteAll(_messagesForId(id));
-    _box('notes').deleteAll(_notesForId(id));
-    _box('budget').deleteAll(_budgetForId(id));
-    _box('decisions').deleteAll(_decisionsForId(id));
-    _box('risks').deleteAll(_risksForId(id));
-    _box('journal').deleteAll(_journalForId(id));
-    _box('resources').deleteAll(_resourcesForId(id));
-    _box('milestones').deleteAll(_milestonesForId(id));
+    for (final box in _projectBoxes) {
+      _box(box).deleteAll(_idsForProject(box, id));
+    }
   }
 
-  List<String> _tasksForId(String box, String id) => _box(box)
+  List<String> _idsForProject(String box, String projectId) => _box(box)
       .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _objectivesForId(String id) => _box('objectives')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _messagesForId(String id) => _box('messages')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _notesForId(String id) => _box('notes')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _budgetForId(String id) => _box('budget')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _decisionsForId(String id) => _box('decisions')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _risksForId(String id) => _box('risks')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _journalForId(String id) => _box('journal')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _resourcesForId(String id) => _box('resources')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
-      .map((e) => e['id'] as String)
-      .toList();
-
-  List<String> _milestonesForId(String id) => _box('milestones')
-      .values
-      .where((e) => (e['projectId'] as String?) == id)
+      .where((e) => (e['projectId'] as String?) == projectId)
       .map((e) => e['id'] as String)
       .toList();
 
@@ -188,7 +141,7 @@ class DatabaseService {
   void saveMessage(ChatMessage m) => _put('messages', m.id, m.toJson());
 
   void clearMessages(String projectId) {
-    _box('messages').deleteAll(_messagesForId(projectId));
+    _box('messages').deleteAll(_idsForProject('messages', projectId));
   }
 
   // ---- NOTES ----

@@ -66,7 +66,8 @@ lib/
   screens/
     onboarding/      Bienvenue / prise en main
     home/            Accueil (idées, projets, « Que dois-je faire maintenant ? »)
-    projects/        Liste des projets, création idée→chat→plan, dashboard, 10 sections, chat
+    projects/        Liste des projets, création idée→chat→plan, dashboard, chat
+      sections/      Une section par fichier (objectifs, tâches, kanban, budget…)
     today/           Vue du jour (priorités, échéances)
     ai/              Hub IA, inspiration, réglages clés API
     profile/         Profil, préférences, réinitialisation

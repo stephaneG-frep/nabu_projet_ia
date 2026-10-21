@@ -3,9 +3,10 @@ import '../models/models.dart';
 import '../services/database_service.dart';
 import '../services/key_storage_service.dart';
 
+/// Must be overridden with an initialized instance (see main.dart): an
+/// uninitialized DatabaseService would crash on first access to a Hive box.
 final databaseProvider = Provider<DatabaseService>((ref) {
-  final db = DatabaseService();
-  return db;
+  throw UnimplementedError('databaseProvider must be overridden');
 });
 
 class AppStateNotifier extends StateNotifier<SettingsData> {
